@@ -16,7 +16,6 @@ public class PlayerCharacterAnimator : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-
     }
 
     public void OnIdle()
@@ -43,12 +42,16 @@ public class PlayerCharacterAnimator : MonoBehaviour
     {
         _thirdpersonmovement.Idle += OnIdle;
         _thirdpersonmovement.StartRunning += OnStartRunning;
+        _thirdpersonmovement.StartJumping += OnStartJumping;
+        _thirdpersonmovement.StartFalling += OnStartFalling;
     }
 
     private void OnDisable()
     {
         _thirdpersonmovement.Idle -= OnIdle;
         _thirdpersonmovement.StartRunning -= OnStartRunning;
+        _thirdpersonmovement.StartJumping -= OnStartJumping;
+        _thirdpersonmovement.StartFalling -= OnStartFalling;
     }
 
 }
