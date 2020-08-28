@@ -26,7 +26,9 @@ public class ThirdPersonMovement : MonoBehaviour
 
     float _turnSmoothVelocity;
     bool _isMoving = false;
-
+    bool _isFalling = false;
+    bool _landed = false;
+    bool _jumped = false;
     private void Start()
     {
         Idle?.Invoke();
@@ -35,14 +37,15 @@ public class ThirdPersonMovement : MonoBehaviour
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        float upward = Input.GetAxisRaw("Jump");
 
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
         isGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance, groundMask);
 
+
         if (isGrounded && velocity.y < 0)
         {
+            _isFalling = true;
             velocity.y = -2f;
             CheckIfStoppedFall();
         }
@@ -53,9 +56,17 @@ public class ThirdPersonMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+            _jumped = true;
+            if(velocity.y > 0)
+            {
+                // _isFalling = true;
+                CheckIfStartedFall();
+            }
             CheckIfStartedJump();
-            CheckIfStartedFall();
+  
         }
+
+        
 
         if (direction.magnitude >= 0.1f)
         {
@@ -95,28 +106,29 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void CheckIfStartedJump()
     {
-        if(isGrounded == true)
+        if(_jumped == true)
         {
             StartJumping?.Invoke();
-
         }
-        isGrounded = false;
+        _jumped = false;
+        _isFalling = true;
     }
 
-    //fix checkif started and stopped fall.
-    private void CheckIfStartedFall()
+  private void CheckIfStartedFall()
     {
-        if(isGrounded == false)
+        if(_isFalling == true)
         {
             StartFalling?.Invoke();
         }
+        _isFalling = false;
     }
 
     private void CheckIfStoppedFall()
     {
-        if(isGrounded == true)
+        if(_landed == true)
         {
             Idle?.Invoke();
         }
+        _landed = false;
     }
 }

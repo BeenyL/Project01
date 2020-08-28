@@ -35,7 +35,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
 
     public void OnStartFalling()
     {
-        _animator.CrossFadeInFixedTime(FallState, .2f);
+        _animator.CrossFadeInFixedTime(FallState, .5f);
     }
 
     private void OnEnable()
