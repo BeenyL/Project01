@@ -32,9 +32,7 @@ public class ThirdPersonMovement : MonoBehaviour
     bool _isMoving = false;
     bool _isFalling = false;
     bool _landed = true;
-    bool _landedIdle = false;
     bool _jumped = false;
-    bool _Sprinted = false;
     bool _isSprinting = false;
     private void Start()
     {
@@ -80,7 +78,7 @@ public class ThirdPersonMovement : MonoBehaviour
             {
                 StartSprinting?.Invoke();
             }
-            else if (Input.GetKeyUp(KeyCode.LeftShift))
+            else if (Input.GetKeyUp(KeyCode.LeftShift) && isGrounded)
             {
                 StartRunning?.Invoke();
             }
@@ -176,7 +174,7 @@ public class ThirdPersonMovement : MonoBehaviour
         _isFalling = true;
     }
 
-    //check and play landing animaion
+    //check and play landing animation
     private void CheckIfStartedLand()
     {
         if(_landed == false)
