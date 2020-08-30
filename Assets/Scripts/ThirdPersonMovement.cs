@@ -20,8 +20,9 @@ public class ThirdPersonMovement : MonoBehaviour
     public LayerMask groundMask;
     bool isGrounded;
 
-    [SerializeField] float _speed = 6f;
-    [SerializeField] float _SprintSpeed = 6f;
+    public float _speed;
+    [SerializeField] float _BasedSpeed = 6f;
+    [SerializeField] float _SprintSpeed = 12f;
     [SerializeField] float _jumpHeight = 3f;
     [SerializeField] float _gravity = -9.81f;
     [SerializeField] float _turnSmoothTime = .01f;
@@ -52,30 +53,44 @@ public class ThirdPersonMovement : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
+        //sprint detection (changes speed)
+        if (!Input.GetKey(KeyCode.LeftShift))
+        {
+            _isSprinting = false;
+            _speed = _BasedSpeed;
+        }
+        else
+        {
+            _isSprinting = true;
+            _speed = _SprintSpeed;
+        }
+
         if (direction.magnitude >= 0.1f)
         {
-            CheckIfStartedMoving();
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDir.normalized * _speed * Time.deltaTime);
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                StartSprinting?.Invoke();
+            }
+
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                StartRunning?.Invoke();
+            }
+            else
+            {
+                CheckIfStartedMoving();
+            }
         }
         else
         {
             CheckIfStoppedMoving();
-        }
-        //sprint detection
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            CheckIfStartedSprinting();
-            Sprint(true);
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            CheckIfStoppedSprinting();
-            Sprint(false);
         }
 
         //jump
@@ -92,9 +107,8 @@ public class ThirdPersonMovement : MonoBehaviour
         }
 
         //jump to fall transition
-        if (velocity.y == 0)
+        if (controller.velocity.y > 2)
         {
-            //Debug.Log("0");
             CheckIfStartedFall();
         }
 
@@ -107,26 +121,23 @@ public class ThirdPersonMovement : MonoBehaviour
 
     }
 
-    private void Sprint(bool _Sprinted)
-    {
-        if(_Sprinted == true)
-        {
-            _speed += _SprintSpeed;
-        }
-        if (_Sprinted == false)
-        {
-            _speed -= _SprintSpeed;
-        }
-    }
-
     private void CheckIfStartedMoving()
     {
-        if(_isMoving == false)
+        if (isGrounded == true)
         {
-            StartRunning?.Invoke();
-            Debug.Log("walking");
+            if (_isMoving == false)
+            {
+                if(_isSprinting == false)
+                {
+                    StartRunning?.Invoke();
+                }
+                else
+                {
+                    StartSprinting?.Invoke();
+                }
+            }
+            _isMoving = true;
         }
-        _isMoving = true;
     }
 
     private void CheckIfStoppedMoving()
@@ -134,11 +145,23 @@ public class ThirdPersonMovement : MonoBehaviour
         if(_isMoving == true)
         {
             Idle?.Invoke();
-            Debug.Log("Standing");
+            //Debug.Log("Standing");
         }
         _isMoving = false; 
     }
 
+    private void CheckIfStartedSprint()
+    {
+        if (isGrounded == true)
+        {
+            if (_isSprinting == false)
+            {
+                Debug.Log("called");
+                StartSprinting?.Invoke();
+            }
+        }
+        _isSprinting = true;
+    }
     private void CheckIfStartedJump()
     {
         if(_jumped == false)
@@ -181,26 +204,5 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         _landedIdle = false;
     }
-
-    private void CheckIfStartedSprinting()
-    {
-        if (_isSprinting == false)
-        {
-            StartSprinting?.Invoke();
-            Debug.Log("running");
-        }
-        _isSprinting = true;
-    }
-
-    private void CheckIfStoppedSprinting()
-    {
-        if (_isSprinting == true)
-        {
-            StartRunning?.Invoke();
-            Debug.Log("running");
-        }
-        _isSprinting = false;
-    }
-
 
 }
