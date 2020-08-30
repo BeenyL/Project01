@@ -47,13 +47,13 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void Movement()
     {
-        //movement
+        //movement section
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
-        //sprint detection (changes speed)
+        //sprint detection
         if (!Input.GetKey(KeyCode.LeftShift))
         {
             _isSprinting = false;
@@ -65,6 +65,7 @@ public class ThirdPersonMovement : MonoBehaviour
             _speed = _SprintSpeed;
         }
 
+        //movement
         if (direction.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
@@ -74,11 +75,11 @@ public class ThirdPersonMovement : MonoBehaviour
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDir.normalized * _speed * Time.deltaTime);
 
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            // walk/sprint state change (grounded to keep sprinting from playing during jump)
+            if (Input.GetKeyDown(KeyCode.LeftShift) && isGrounded)
             {
                 StartSprinting?.Invoke();
             }
-
             else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 StartRunning?.Invoke();
@@ -93,7 +94,7 @@ public class ThirdPersonMovement : MonoBehaviour
             CheckIfStoppedMoving();
         }
 
-        //jump
+        //jump section
         isGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance, groundMask);
 
         velocity.y += _gravity * Time.deltaTime;
@@ -113,14 +114,15 @@ public class ThirdPersonMovement : MonoBehaviour
         }
 
         //check if player has landed
-        if (isGrounded && velocity.y < 0)
+        if (isGrounded && velocity.y < 0 && _isFalling)
         {
             velocity.y = -2f;
-            CheckIfStoppedFall();
+            CheckIfStartedLand();
+            CheckIfStoppedMoving();
         }
-
     }
 
+    //decides if player will use sprint or walk animation
     private void CheckIfStartedMoving()
     {
         if (isGrounded == true)
@@ -140,6 +142,7 @@ public class ThirdPersonMovement : MonoBehaviour
         }
     }
 
+    //check if player stopped moving play idle
     private void CheckIfStoppedMoving()
     {
         if(_isMoving == true)
@@ -150,18 +153,7 @@ public class ThirdPersonMovement : MonoBehaviour
         _isMoving = false; 
     }
 
-    private void CheckIfStartedSprint()
-    {
-        if (isGrounded == true)
-        {
-            if (_isSprinting == false)
-            {
-                Debug.Log("called");
-                StartSprinting?.Invoke();
-            }
-        }
-        _isSprinting = true;
-    }
+    //check and play jump animation
     private void CheckIfStartedJump()
     {
         if(_jumped == false)
@@ -173,6 +165,7 @@ public class ThirdPersonMovement : MonoBehaviour
         _landed = false;
     }
 
+    //check and play falling animation
   private void CheckIfStartedFall()
     {
         if(_isFalling == false)
@@ -183,7 +176,8 @@ public class ThirdPersonMovement : MonoBehaviour
         _isFalling = true;
     }
 
-    private void CheckIfStoppedFall()
+    //check and play landing animaion
+    private void CheckIfStartedLand()
     {
         if(_landed == false)
         {
@@ -195,14 +189,4 @@ public class ThirdPersonMovement : MonoBehaviour
         _landed = true;
     }
  
-    //implement way to get it to idle after jump
-    private void CheckIfLanded()
-    {
-        if (_landedIdle == true)
-        {
-            Idle?.Invoke();
-        }
-        _landedIdle = false;
-    }
-
 }
