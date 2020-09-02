@@ -111,10 +111,14 @@ public class ThirdPersonMovement : MonoBehaviour
             CheckIfStartedFall();
         }
 
-        //check if player has landed
-        if (isGrounded && velocity.y < 0 && _isFalling)
+        if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
+        }
+
+        //check if player has landed
+            if (isGrounded && velocity.y < 0 && _isFalling)
+        {
             CheckIfStartedLand();
             CheckIfStoppedMoving();
         }
