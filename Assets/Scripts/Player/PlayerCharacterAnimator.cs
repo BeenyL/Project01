@@ -12,6 +12,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
     const string FallState = "Falling";
     const string LandState = "Landing";
     const string SprintState = "Sprinting";
+    const string ChannelState = "Channeling";
 
     Animator _animator = null;
 
@@ -50,6 +51,11 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _animator.CrossFadeInFixedTime(LandState, .2f);
     }
 
+    public void OnStartChanneling()
+    {
+        _animator.CrossFadeInFixedTime(ChannelState, .2f);
+    }
+
     private void OnEnable()
     {
         _thirdpersonmovement.Idle += OnIdle;
@@ -58,6 +64,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _thirdpersonmovement.StartFalling += OnStartFalling;
         _thirdpersonmovement.StartSprinting += OnStartSprinting;
         _thirdpersonmovement.StartLanding += OnStartLanding;
+        _thirdpersonmovement.StartChannel += OnStartChanneling;
     }
 
     private void OnDisable()
@@ -68,6 +75,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _thirdpersonmovement.StartFalling -= OnStartFalling;
         _thirdpersonmovement.StartSprinting -= OnStartSprinting;
         _thirdpersonmovement.StartLanding -= OnStartLanding;
+        _thirdpersonmovement.StartChannel -= OnStartChanneling;
     }
 
 }

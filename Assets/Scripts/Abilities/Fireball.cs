@@ -6,15 +6,33 @@ public class Fireball : Ability
 {
     [SerializeField] GameObject _projectileSpawned = null;
     int _rank = 1;
+    [SerializeField] int _amt = 3;
+    [SerializeField] Transform[] SpawnPosition;
+    [SerializeField] int _dmg = 3;
+    [SerializeField] AudioSource Soundfx;
+    public int Dmg {get => _dmg; set => _dmg = value;}
 
+    private void Start()
+    {
+        //find the 3 fireball positions
+        for(int i = 0; i < _amt; i++)
+        {
+            SpawnPosition[i] = GameObject.Find("FireBallSpawnPt" + (i+1).ToString()).transform;
+        }
+    }
     public override void Use(Transform orgin, Transform target)
     {
-        GameObject projectile = Instantiate(_projectileSpawned, orgin.position, orgin.rotation);
-        if (target == null)
+        for(int i = 0; i < _amt; i++)
         {
-            projectile.transform.LookAt(target);
+            Debug.Log(SpawnPosition.Length);
+            Soundfx.Play();
+            GameObject projectile = Instantiate(_projectileSpawned, SpawnPosition[i].position, SpawnPosition[i].rotation );
+            if (target == null)
+            {
+                projectile.transform.LookAt(target);
+            }
+            Destroy(projectile, 1f);
         }
-        Destroy(projectile, 3.5f);
 
     }
 

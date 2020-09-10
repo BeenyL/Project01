@@ -11,6 +11,8 @@ public class ThirdPersonMovement : MonoBehaviour
     public event Action StartFalling = delegate { };
     public event Action StartSprinting = delegate { };
     public event Action StartLanding = delegate { };
+    public event Action StartChannel = delegate { };
+
 
     [SerializeField] CharacterController controller;
     [SerializeField] Transform cam;
@@ -34,6 +36,7 @@ public class ThirdPersonMovement : MonoBehaviour
     bool _landed = true;
     bool _jumped = false;
     bool _isSprinting = false;
+    bool _isChannel = false;
     private void Start()
     {
         Idle?.Invoke();
@@ -41,6 +44,7 @@ public class ThirdPersonMovement : MonoBehaviour
     private void Update()
     {
         Movement();
+        Spells();
     }
 
     private void Movement()
@@ -124,6 +128,18 @@ public class ThirdPersonMovement : MonoBehaviour
         }
     }
 
+    //Spells
+    private void Spells()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            CheckIfStartedChannel();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            _isChannel = false;
+        }
+    }
     //decides if player will use sprint or walk animation
     private void CheckIfStartedMoving()
     {
@@ -147,7 +163,7 @@ public class ThirdPersonMovement : MonoBehaviour
     //check if player stopped moving play idle
     private void CheckIfStoppedMoving()
     {
-        if(_isMoving == true)
+        if (_isMoving == true && isGrounded == true)
         {
             Idle?.Invoke();
             //Debug.Log("Standing");
@@ -191,4 +207,13 @@ public class ThirdPersonMovement : MonoBehaviour
         _landed = true;
     }
  
+    private void CheckIfStartedChannel()
+    {
+        if(_isChannel == false)
+        {
+            StartChannel?.Invoke();
+
+        }
+        _isChannel = true;
+    }
 }

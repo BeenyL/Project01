@@ -10,10 +10,6 @@ public class SpellMovement : Fireball
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-    }
-    private void Update()
-    {
         rb.AddForce(gameObject.transform.forward * speed);
-
     }
 }
