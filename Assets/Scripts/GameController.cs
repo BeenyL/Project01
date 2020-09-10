@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+    //restart / quit
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Backspace))

@@ -13,7 +13,6 @@ public class ThirdPersonMovement : MonoBehaviour
     public event Action StartLanding = delegate { };
     public event Action StartChannel = delegate { };
 
-
     [SerializeField] CharacterController controller;
     [SerializeField] Transform cam;
 
@@ -21,6 +20,9 @@ public class ThirdPersonMovement : MonoBehaviour
     [SerializeField] float _groundDistance = .04f;
     public LayerMask groundMask;
     bool isGrounded;
+   
+    public bool Grounded { get => isGrounded; set => isGrounded = value;}
+    public bool Moving { get => _isMoving; set => _isMoving = value; }
 
     public float _speed;
     [SerializeField] float _BasedSpeed = 6f;
@@ -131,6 +133,7 @@ public class ThirdPersonMovement : MonoBehaviour
     //Spells
     private void Spells()
     {
+        //channel fireball
         if (Input.GetMouseButtonDown(0))
         {
             CheckIfStartedChannel();
@@ -166,7 +169,6 @@ public class ThirdPersonMovement : MonoBehaviour
         if (_isMoving == true && isGrounded == true)
         {
             Idle?.Invoke();
-            //Debug.Log("Standing");
         }
         _isMoving = false; 
     }
@@ -177,7 +179,6 @@ public class ThirdPersonMovement : MonoBehaviour
         if(_jumped == false)
         {
             StartJumping?.Invoke();
-            Debug.Log("jumping");
         }
         _jumped = true;
         _landed = false;
@@ -189,7 +190,6 @@ public class ThirdPersonMovement : MonoBehaviour
         if(_isFalling == false)
         {
             StartFalling?.Invoke();
-            Debug.Log("falling");
         }
         _isFalling = true;
     }
@@ -200,19 +200,18 @@ public class ThirdPersonMovement : MonoBehaviour
         if(_landed == false)
         {
             StartLanding?.Invoke();
-            Debug.Log("landed");
         }
         _isFalling = false;
         _jumped = false;
         _landed = true;
     }
- 
+    
+    //check if player can channel
     private void CheckIfStartedChannel()
     {
-        if(_isChannel == false)
+        if(_isChannel == false && isGrounded == true && _isMoving == false)
         {
             StartChannel?.Invoke();
-
         }
         _isChannel = true;
     }

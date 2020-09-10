@@ -5,10 +5,11 @@ using UnityEngine;
 public class Fireball : Ability
 {
     [SerializeField] GameObject _projectileSpawned = null;
+    //rank not developed yet
     int _rank = 1;
     [SerializeField] int _amt = 3;
-    [SerializeField] Transform[] SpawnPosition;
     [SerializeField] int _dmg = 3;
+    [SerializeField] Transform[] SpawnPosition;
     [SerializeField] AudioSource Soundfx;
     public int Dmg {get => _dmg; set => _dmg = value;}
 

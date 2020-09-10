@@ -7,6 +7,7 @@ public class SpellMovement : Fireball
     Rigidbody rb;
     public float speed = .1f;
 
+    //fireball movement
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();

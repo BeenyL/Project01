@@ -9,6 +9,7 @@ public class PlayerAbility : MonoBehaviour
     [SerializeField] Ability _newAbilityToTest = null;
 
     [SerializeField] Transform _testTarget = null;
+    [SerializeField] ThirdPersonMovement thirdpersonmovement;
     public Transform CurrentTarget { get; private set; }
 
     private void Awake()
@@ -21,11 +22,12 @@ public class PlayerAbility : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        //groundcheck to prevent player from using fireball while jumping or moving
+        if (Input.GetMouseButtonDown(0) && thirdpersonmovement.Grounded == true && thirdpersonmovement.Moving == false)
         {
             _abilityLoadout.UseEquippedAbility(CurrentTarget);
         }
-        //testing abilties
+        //test abilties *ignore
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             _abilityLoadout.UseEquippedAbility(CurrentTarget);
@@ -44,6 +46,7 @@ public class PlayerAbility : MonoBehaviour
         }
     }
 
+    //test target *ignore
     public void SetTarget(Transform newTarget)
     {
         CurrentTarget = newTarget;
