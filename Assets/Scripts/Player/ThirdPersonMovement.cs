@@ -14,6 +14,7 @@ public class ThirdPersonMovement : MonoBehaviour
     public event Action StartChannel = delegate { };
 
     [SerializeField] CharacterController controller;
+    [SerializeField] Camera camera;
     [SerializeField] Transform cam;
 
     [SerializeField] Transform _groundCheck;
@@ -69,6 +70,15 @@ public class ThirdPersonMovement : MonoBehaviour
             _speed = _SprintSpeed;
         }
 
+        //idle rotation
+        if(direction.magnitude == 0 && Input.GetMouseButton(1))
+        {
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            Vector3 standDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.zero;
+            gameObject.transform.Rotate(standDir.normalized);
+        }
         //movement
         if (direction.magnitude >= 0.1f)
         {
