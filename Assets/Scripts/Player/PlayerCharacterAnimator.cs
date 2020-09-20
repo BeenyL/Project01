@@ -5,7 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerCharacterAnimator : MonoBehaviour
 {
-    [SerializeField] ThirdPersonMovement _thirdpersonmovement = null;
+    [SerializeField] PlayerMovement _playermovement = null;
+    [SerializeField] PlayerProperty _playerproperty = null;
     const string IdleState = "Idle";
     const string RunState = "Run";
     const string JumpState = "Jumping";
@@ -13,6 +14,8 @@ public class PlayerCharacterAnimator : MonoBehaviour
     const string LandState = "Landing";
     const string SprintState = "Sprinting";
     const string ChannelState = "Channeling";
+    const string BuffState = "Buffing";
+    const string DieState = "Dying";
 
     Animator _animator = null;
 
@@ -56,26 +59,40 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _animator.CrossFadeInFixedTime(ChannelState, .2f);
     }
 
+    public void OnStartBuffing()
+    {
+        _animator.CrossFadeInFixedTime(BuffState, .2f);
+    }
+
+    public void OnStartDie()
+    {
+        _animator.CrossFadeInFixedTime(DieState, .2f);
+    }
+
     private void OnEnable()
     {
-        _thirdpersonmovement.Idle += OnIdle;
-        _thirdpersonmovement.StartRunning += OnStartRunning;
-        _thirdpersonmovement.StartJumping += OnStartJumping;
-        _thirdpersonmovement.StartFalling += OnStartFalling;
-        _thirdpersonmovement.StartSprinting += OnStartSprinting;
-        _thirdpersonmovement.StartLanding += OnStartLanding;
-        _thirdpersonmovement.StartChannel += OnStartChanneling;
+        _playermovement.Idle += OnIdle;
+        _playermovement.StartRunning += OnStartRunning;
+        _playermovement.StartJumping += OnStartJumping;
+        _playermovement.StartFalling += OnStartFalling;
+        _playermovement.StartSprinting += OnStartSprinting;
+        _playermovement.StartLanding += OnStartLanding;
+        _playermovement.StartChannel += OnStartChanneling;
+        _playerproperty.StartBuff += OnStartBuffing;
+        _playerproperty.StartDeath += OnStartDie;
     }
 
     private void OnDisable()
     {
-        _thirdpersonmovement.Idle -= OnIdle;
-        _thirdpersonmovement.StartRunning -= OnStartRunning;
-        _thirdpersonmovement.StartJumping -= OnStartJumping;
-        _thirdpersonmovement.StartFalling -= OnStartFalling;
-        _thirdpersonmovement.StartSprinting -= OnStartSprinting;
-        _thirdpersonmovement.StartLanding -= OnStartLanding;
-        _thirdpersonmovement.StartChannel -= OnStartChanneling;
+        _playermovement.Idle -= OnIdle;
+        _playermovement.StartRunning -= OnStartRunning;
+        _playermovement.StartJumping -= OnStartJumping;
+        _playermovement.StartFalling -= OnStartFalling;
+        _playermovement.StartSprinting -= OnStartSprinting;
+        _playermovement.StartLanding -= OnStartLanding;
+        _playermovement.StartChannel -= OnStartChanneling;
+        _playerproperty.StartBuff -= OnStartBuffing;
+        _playerproperty.StartDeath -= OnStartDie;
     }
 
 }

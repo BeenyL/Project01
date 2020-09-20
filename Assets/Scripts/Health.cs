@@ -18,12 +18,9 @@ public class Health : MonoBehaviour
         Debug.Log(_currentHealth);
     }
 
-    public void Die()
+    public virtual void Die()
     {
-        if(_currentHealth <= 0)
-        {
-            Destroy(gameObject);
-        }
+
     }
 
 }

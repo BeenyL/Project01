@@ -25,7 +25,7 @@ public class Fireball : Ability
     {
         for(int i = 0; i < _amt; i++)
         {
-            Debug.Log(SpawnPosition.Length);
+            //Debug.Log(SpawnPosition.Length);
             Soundfx.Play();
             GameObject projectile = Instantiate(_projectileSpawned, SpawnPosition[i].position, SpawnPosition[i].rotation );
             if (target == null)

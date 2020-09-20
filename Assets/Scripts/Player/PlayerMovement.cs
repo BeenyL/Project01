@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class ThirdPersonMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     public event Action Idle = delegate { };
     public event Action StartRunning = delegate { };
@@ -14,9 +14,9 @@ public class ThirdPersonMovement : MonoBehaviour
     public event Action StartChannel = delegate { };
 
     [SerializeField] CharacterController controller;
-    [SerializeField] Camera camera;
     [SerializeField] Transform cam;
-
+    [SerializeField] PlayerAbility playerability;
+    [SerializeField] PlayerProperty playerproperty;
     [SerializeField] Transform _groundCheck;
     [SerializeField] float _groundDistance = .04f;
     public LayerMask groundMask;
@@ -40,6 +40,8 @@ public class ThirdPersonMovement : MonoBehaviour
     bool _jumped = false;
     bool _isSprinting = false;
     bool _isChannel = false;
+
+
     private void Start()
     {
         Idle?.Invoke();
@@ -70,9 +72,11 @@ public class ThirdPersonMovement : MonoBehaviour
             _speed = _SprintSpeed;
         }
 
+        playerproperty = GetComponent<PlayerProperty>();
         //idle rotation
-        if(direction.magnitude == 0 && Input.GetMouseButton(1))
+        if (direction.magnitude == 0 && Input.GetMouseButton(1) && playerproperty.isDead == false)
         {
+
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
@@ -80,7 +84,7 @@ public class ThirdPersonMovement : MonoBehaviour
             gameObject.transform.Rotate(standDir.normalized);
         }
         //movement
-        if (direction.magnitude >= 0.1f)
+        if (direction.magnitude >= 0.1f && playerproperty.isDead == false)
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
@@ -144,15 +148,17 @@ public class ThirdPersonMovement : MonoBehaviour
     private void Spells()
     {
         //channel fireball
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && playerability.Casted == false)
         {
             CheckIfStartedChannel();
+ 
         }
         if (Input.GetMouseButtonUp(0))
         {
             _isChannel = false;
         }
     }
+
     //decides if player will use sprint or walk animation
     private void CheckIfStartedMoving()
     {
