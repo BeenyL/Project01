@@ -9,25 +9,36 @@ public class PlayerProperty : Health
     [SerializeField] PlayerHUD playerhud;
     [SerializeField] ParticleSystem rageEffect;
     [SerializeField] PlayerMovement playermovement;
+    [SerializeField] AudioSource audio;
+    [SerializeField] AudioClip soundHit;
+    [SerializeField] AudioClip soundDeath;
     Fireball fireball;
+
+    [SerializeField] ParticleSystem Hitparticle;
+    [SerializeField] ParticleSystem Dieparticle;
 
     [SerializeField] int Rage;
     int _maxRage;
     int _currentRage;
     int _maxHealth;
     int _rageBoost;
+    int _healthcheck;
 
     bool _isDead = false;
+    bool _ishurt = false;
 
     public event Action StartBuff = delegate { };
+    public event Action StartHurt = delegate { };
     public event Action StartDeath = delegate { };
     public bool isDead { get => _isDead; set => _isDead = value; }
+    public bool isHurt { get => _ishurt; set => _ishurt = value; }
     public int RageBoost { get => _rageBoost; set => _rageBoost = value; }
     public int CurrentRage{ get => _currentRage; set => _currentRage = value; }
     public int MaxRage { get => _maxRage; set => _maxRage = value; }
     public int MaxHealth { get => _maxHealth; set => _maxHealth = value;}
     private void Awake()
     {
+        _healthcheck = _CurrentHealth;
         _maxRage = Rage;
         _currentRage = 0;
         _maxHealth = _CurrentHealth;
@@ -39,24 +50,14 @@ public class PlayerProperty : Health
         playerhud.updateHealthSlider();
         playerhud.updateRageSlider();
     }
-    //future implementation
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("bump");
-        TakeDamage(5);
-        playerhud.updateHealthSlider();
-    }
-    private void OnTriggerEnter(Collider other)
-    {
 
-    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
             _currentRage = 0;
             playerhud.updateRageSlider();
-            TakeDamage(50);
+            TakeDamage(10);
             playerhud.updateHealthSlider();
             Die();
         }
@@ -65,16 +66,37 @@ public class PlayerProperty : Health
             playerhud.updateRageSlider();
         }
         rageTrigger();
+        Damaged();
+        Die();
+    }
+
+    //damaged
+    public void Damaged()
+    {
+        if (_CurrentHealth < _healthcheck && _CurrentHealth != 0 && _isDead == false)
+        {
+            audio.PlayOneShot(soundHit);
+            Hitparticle.Play();
+            StartHurt?.Invoke();
+            _healthcheck = _CurrentHealth;
+        }
     }
 
     //die
-    public override void Die()
+    protected override void Die()
     {
-        if(_CurrentHealth <= 0)
+        if (_CurrentHealth <= 0 && _isDead == false)
         {
-            _isDead = true;
-            StartDeath?.Invoke();
+            StartCoroutine(DieSequence());
         }
+    }
+    IEnumerator DieSequence()
+    {
+        audio.PlayOneShot(soundDeath);
+        _isDead = true;
+        StartDeath?.Invoke();
+        yield return new WaitForSeconds(1.25f);
+        Dieparticle.Play();
     }
 
     //Rage

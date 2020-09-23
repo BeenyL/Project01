@@ -11,6 +11,7 @@ public class Fireball : Ability
     [SerializeField] int _dmg = 3;
     [SerializeField] Transform[] SpawnPosition;
     [SerializeField] AudioSource Soundfx;
+    [SerializeField] Rigidbody rb_Fireball;
     public int Dmg {get => _dmg; set => _dmg = value;}
 
     private void Start()
@@ -23,6 +24,7 @@ public class Fireball : Ability
     }
     public override void Use(Transform orgin, Transform target)
     {
+        
         for(int i = 0; i < _amt; i++)
         {
             //Debug.Log(SpawnPosition.Length);
@@ -32,9 +34,10 @@ public class Fireball : Ability
             {
                 projectile.transform.LookAt(target);
             }
+            
             Destroy(projectile, 1f);
         }
-
+        
     }
 
 }

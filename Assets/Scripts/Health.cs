@@ -5,6 +5,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] int _currentHealth = 50;
+
     public int _CurrentHealth { get => _currentHealth; set => _currentHealth = value; }
     public void Heal(int amount)
     {
@@ -18,7 +19,7 @@ public class Health : MonoBehaviour
         Debug.Log(_currentHealth);
     }
 
-    public virtual void Die()
+    protected virtual void Die()
     {
 
     }

@@ -16,6 +16,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
     const string ChannelState = "Channeling";
     const string BuffState = "Buffing";
     const string DieState = "Dying";
+    const string HurtState = "Damaged";
 
     Animator _animator = null;
 
@@ -69,6 +70,11 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _animator.CrossFadeInFixedTime(DieState, .2f);
     }
 
+    public void OnStartHurt()
+    {
+        _animator.CrossFadeInFixedTime(HurtState, .2f);
+    }
+
     private void OnEnable()
     {
         _playermovement.Idle += OnIdle;
@@ -78,6 +84,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _playermovement.StartSprinting += OnStartSprinting;
         _playermovement.StartLanding += OnStartLanding;
         _playermovement.StartChannel += OnStartChanneling;
+        _playerproperty.StartHurt += OnStartHurt;
         _playerproperty.StartBuff += OnStartBuffing;
         _playerproperty.StartDeath += OnStartDie;
     }
@@ -91,6 +98,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _playermovement.StartSprinting -= OnStartSprinting;
         _playermovement.StartLanding -= OnStartLanding;
         _playermovement.StartChannel -= OnStartChanneling;
+        _playerproperty.StartHurt -= OnStartHurt;
         _playerproperty.StartBuff -= OnStartBuffing;
         _playerproperty.StartDeath -= OnStartDie;
     }

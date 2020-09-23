@@ -13,6 +13,14 @@ public class PlayerMovement : MonoBehaviour
     public event Action StartLanding = delegate { };
     public event Action StartChannel = delegate { };
 
+    [SerializeField] ParticleSystem walkParticles;
+    [SerializeField] ParticleSystem runParticles;
+    [SerializeField] ParticleSystem jumpParticles;
+    [SerializeField] ParticleSystem landParticles;
+
+    [SerializeField] AudioSource audio;
+    [SerializeField] AudioClip soundRun;
+
     [SerializeField] CharacterController controller;
     [SerializeField] Transform cam;
     [SerializeField] PlayerAbility playerability;
@@ -21,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _groundDistance = .04f;
     public LayerMask groundMask;
     bool isGrounded;
-   
+
     public bool Grounded { get => isGrounded; set => isGrounded = value;}
     public bool Moving { get => _isMoving; set => _isMoving = value; }
 
@@ -41,6 +49,10 @@ public class PlayerMovement : MonoBehaviour
     bool _isSprinting = false;
     bool _isChannel = false;
 
+    private void Awake()
+    {
+
+    }
 
     private void Start()
     {
@@ -84,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
             gameObject.transform.Rotate(standDir.normalized);
         }
         //movement
-        if (direction.magnitude >= 0.1f && playerproperty.isDead == false)
+        if (direction.magnitude >= 0.1f && playerproperty.isDead == false && playerproperty.isHurt == false)
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
@@ -94,13 +106,20 @@ public class PlayerMovement : MonoBehaviour
             controller.Move(moveDir.normalized * _speed * Time.deltaTime);
 
             // walk/sprint state change (grounded to keep sprinting from playing during jump)
-            if (Input.GetKeyDown(KeyCode.LeftShift) && isGrounded)
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
+                if(isGrounded == true) { 
                 StartSprinting?.Invoke();
+                }
+                runParticles.Play();
             }
-            else if (Input.GetKeyUp(KeyCode.LeftShift) && isGrounded)
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                StartRunning?.Invoke();
+                if (isGrounded == true)
+                {
+                    StartRunning?.Invoke();
+                }
+                runParticles.Stop();
             }
             else
             {
@@ -164,14 +183,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isGrounded == true)
         {
+
             if (_isMoving == false)
-            {
-                if(_isSprinting == false)
+            { 
+                if (_isSprinting == false)
                 {
+                    walkParticles.Play();
                     StartRunning?.Invoke();
                 }
                 else
                 {
+                    runParticles.Play();
                     StartSprinting?.Invoke();
                 }
             }
@@ -184,6 +206,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_isMoving == true && isGrounded == true)
         {
+            runParticles.Stop();
+            walkParticles.Stop();
             Idle?.Invoke();
         }
         _isMoving = false; 
@@ -194,6 +218,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if(_jumped == false)
         {
+            jumpParticles.Play();
+            walkParticles.Stop();
             StartJumping?.Invoke();
         }
         _jumped = true;
@@ -215,6 +241,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(_landed == false)
         {
+            landParticles.Play();
             StartLanding?.Invoke();
         }
         _isFalling = false;
@@ -231,4 +258,5 @@ public class PlayerMovement : MonoBehaviour
         }
         _isChannel = true;
     }
+
 }

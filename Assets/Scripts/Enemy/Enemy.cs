@@ -2,26 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class Enemy : MonoBehaviour
+
+public class Enemy : Health
 {
-    Health health;
-    Rigidbody rb;
+    //Health health;
     [SerializeField] int _dmg;
+    [SerializeField] PlayerProperty playerproperty;
+    [SerializeField] PlayerHUD playerhud;
     public int _Dmg { get => _dmg; set => _dmg = value; }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         PlayerMovement player = other.gameObject.GetComponent<PlayerMovement>();
         if (player != null)
         {
             PlayerImpact(player);
+            playerproperty.TakeDamage(_dmg);
+            playerhud.updateHealthSlider();
         }
     }
 
     protected virtual void PlayerImpact(PlayerMovement player)
     {
-       // player.TakeDamage(_dmg);
+
+    }
+
+    protected override void Die()
+    {
+
     }
 
 }

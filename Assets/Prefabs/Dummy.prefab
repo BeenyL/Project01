@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3956784122390657345}
   - component: {fileID: 3956784122390657344}
   - component: {fileID: 3956784122390657359}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Beak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 3956784122947688222}
   - component: {fileID: 3956784122947688221}
   - component: {fileID: 3956784122947688220}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WingR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 3956784123350435319}
   - component: {fileID: 3956784123350435305}
   - component: {fileID: 1926979101}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Dummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,10 +300,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1899d5ac1da87fa4099fb5c4569bc6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: {fileID: 3956784123350435319}
+  _currentHealth: 3
+  _dmg: 10
+  playerproperty: {fileID: 0}
+  playerhud: {fileID: 0}
   HitParticle: {fileID: 5279215473208922520}
   Soundfx: {fileID: 3956784123350435305}
-  playerproperty: {fileID: 0}
 --- !u!114 &3956784123350435319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,7 +427,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd249b78c6e17747b8a1a1aba6b1ecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentHealth: 50
   _dmg: 30
+  playerproperty: {fileID: 0}
+  playerhud: {fileID: 0}
 --- !u!1 &3956784123600411405
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,7 +443,7 @@ GameObject:
   - component: {fileID: 3956784123600411393}
   - component: {fileID: 3956784123600411392}
   - component: {fileID: 3956784123600411407}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EyeL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -530,7 +535,7 @@ GameObject:
   - component: {fileID: 3956784123792238856}
   - component: {fileID: 3956784123792238871}
   - component: {fileID: 3956784123792238870}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WingL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -623,7 +628,7 @@ GameObject:
   - component: {fileID: 3956784124369296180}
   - component: {fileID: 3956784124369296179}
   - component: {fileID: 3956784124369296178}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EyeR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -714,6 +719,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HitParticles
+      objectReference: {fileID: 0}
+    - target: {fileID: 4382720872852171878, guid: eea885f33cce1c84a84ef049ce5e70cb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 9058609845094825705, guid: eea885f33cce1c84a84ef049ce5e70cb,
         type: 3}

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dummy : MonoBehaviour
+public class Dummy : Enemy
 {
-   [SerializeField] Health _health;
    [SerializeField] ParticleSystem HitParticle;
    [SerializeField] AudioSource Soundfx;
-   [SerializeField] PlayerProperty playerproperty;
     private void OnTriggerEnter(Collider other)
     {
 
@@ -17,12 +15,20 @@ public class Dummy : MonoBehaviour
             PlayerProperty playerproperty = FindObjectOfType<PlayerProperty>();
             if (fireball != null)
             {
-                _health.TakeDamage(fireball.Dmg + playerproperty.RageBoost);
+                TakeDamage(fireball.Dmg + playerproperty.RageBoost);
                 playerproperty.increaseRage(1);
                 Soundfx.Play();
                 HitParticle.Play();
-                _health.Die();
+                Die();
             }
+        }
+    }
+
+    protected override void Die()
+    {
+        if(_CurrentHealth <= 0)
+        {
+            Destroy(gameObject, .5f);
         }
     }
 
