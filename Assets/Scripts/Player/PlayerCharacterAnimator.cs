@@ -7,6 +7,8 @@ public class PlayerCharacterAnimator : MonoBehaviour
 {
     [SerializeField] PlayerMovement _playermovement = null;
     [SerializeField] PlayerProperty _playerproperty = null;
+    [SerializeField] AudioSource audio;
+    [SerializeField] AudioClip[] clips;
     const string IdleState = "Idle";
     const string RunState = "Run";
     const string JumpState = "Jumping";
@@ -25,6 +27,31 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
+    void soundManagement()
+    {
+        IEnumerator soundPattern()
+        {
+            yield return new WaitForSeconds(0.01f);
+            audio.Stop();
+            while (_playermovement.Moving == true && _playermovement.Grounded == true)
+            {
+                if (audio.isPlaying == true)
+                {
+                    audio.Stop();
+                }
+                audio.Play();
+                yield return new WaitForSeconds(.15f);
+
+                if (_playermovement.Grounded == false)
+                {
+                    audio.Stop();
+                }
+
+            }
+        }
+        StartCoroutine(soundPattern());
+    }
+
     public void OnIdle()
     {
         _animator.CrossFadeInFixedTime(IdleState, .2f);
@@ -32,11 +59,16 @@ public class PlayerCharacterAnimator : MonoBehaviour
 
     public void OnStartRunning()
     {
+        audio.clip = clips[0];
         _animator.CrossFadeInFixedTime(RunState, .2f);
+        StopAllCoroutines();
+        soundManagement();
     }
 
     public void OnStartJumping()
     {
+        StopAllCoroutines();
+        audio.PlayOneShot(clips[2]);
         _animator.CrossFadeInFixedTime(JumpState, .2f);
     }
 
@@ -47,11 +79,17 @@ public class PlayerCharacterAnimator : MonoBehaviour
 
     public void OnStartSprinting()
     {
+        StopAllCoroutines();
+        audio.clip = clips[1];
         _animator.CrossFadeInFixedTime(SprintState, .2f);
+        StopAllCoroutines();
+        soundManagement();
     }
 
     public void OnStartLanding()
     {
+        StopAllCoroutines();
+        audio.PlayOneShot(clips[3]);
         _animator.CrossFadeInFixedTime(LandState, .2f);
     }
 
@@ -62,6 +100,8 @@ public class PlayerCharacterAnimator : MonoBehaviour
 
     public void OnStartBuffing()
     {
+        StopAllCoroutines();
+        audio.PlayOneShot(clips[4]);
         _animator.CrossFadeInFixedTime(BuffState, .2f);
     }
 

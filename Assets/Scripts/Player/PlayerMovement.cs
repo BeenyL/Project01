@@ -19,12 +19,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] ParticleSystem landParticles;
 
     [SerializeField] AudioSource audio;
-    [SerializeField] AudioClip soundRun;
 
     [SerializeField] CharacterController controller;
     [SerializeField] Transform cam;
     [SerializeField] PlayerAbility playerability;
     [SerializeField] PlayerProperty playerproperty;
+    [SerializeField] PlayerCharacterAnimator playercharacteranimator;
     [SerializeField] Transform _groundCheck;
     [SerializeField] float _groundDistance = .04f;
     public LayerMask groundMask;
@@ -138,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         //jump detect
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded && playerproperty.isDead == false)
         {
             velocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
             CheckIfStartedJump();
@@ -239,7 +239,7 @@ public class PlayerMovement : MonoBehaviour
     //check and play landing animation
     private void CheckIfStartedLand()
     {
-        if(_landed == false)
+        if(_landed == false && playerproperty.isDead == false)
         {
             landParticles.Play();
             StartLanding?.Invoke();
@@ -252,7 +252,7 @@ public class PlayerMovement : MonoBehaviour
     //check if player can channel
     private void CheckIfStartedChannel()
     {
-        if(_isChannel == false && isGrounded == true && _isMoving == false)
+        if(_isChannel == false && isGrounded == true && _isMoving == false && playerproperty.isDead == false)
         {
             StartChannel?.Invoke();
         }

@@ -126,12 +126,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _projectileSpawned: {fileID: 3130544125807688069}
   _amt: 3
+  _dmg: 3
   SpawnPosition:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _dmg: 3
   Soundfx: {fileID: 0}
+  fireball: {fileID: 8300000, guid: ea13de074ab51b1489bca1982d023fdc, type: 3}
   speed: 500
 --- !u!1 &3490015055079658072
 GameObject:

@@ -9,7 +9,9 @@ public class PlayerProperty : Health
     [SerializeField] PlayerHUD playerhud;
     [SerializeField] ParticleSystem rageEffect;
     [SerializeField] PlayerMovement playermovement;
+    [SerializeField] AbilityLoadout abilityloadout;
     [SerializeField] AudioSource audio;
+    [SerializeField] AudioSource rageAudio;
     [SerializeField] AudioClip soundHit;
     [SerializeField] AudioClip soundDeath;
     Fireball fireball;
@@ -26,12 +28,14 @@ public class PlayerProperty : Health
 
     bool _isDead = false;
     bool _ishurt = false;
+    bool _israge = false;
 
     public event Action StartBuff = delegate { };
     public event Action StartHurt = delegate { };
     public event Action StartDeath = delegate { };
     public bool isDead { get => _isDead; set => _isDead = value; }
     public bool isHurt { get => _ishurt; set => _ishurt = value; }
+    public bool isRage { get => _israge; set => _israge = value; }
     public int RageBoost { get => _rageBoost; set => _rageBoost = value; }
     public int CurrentRage{ get => _currentRage; set => _currentRage = value; }
     public int MaxRage { get => _maxRage; set => _maxRage = value; }
@@ -87,6 +91,7 @@ public class PlayerProperty : Health
     {
         if (_CurrentHealth <= 0 && _isDead == false)
         {
+            _CurrentHealth = 0;
             StartCoroutine(DieSequence());
         }
     }
@@ -113,21 +118,26 @@ public class PlayerProperty : Health
             isFull = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && isFull == true && playermovement.Grounded == true && playermovement.Moving == false)
+        if (Input.GetKeyDown(KeyCode.R) && isFull == true && playermovement.Grounded == true && playermovement.Moving == false && _isDead == false)
         {
             StartCoroutine(RageTimer());
+            abilityloadout.UseUltimateAbility();
             _currentRage = 0;
             playerhud.updateRageSlider();
             isFull = false;
             StartBuff?.Invoke();
         }
-        
+
         IEnumerator RageTimer()
         {
+            _israge = true;
+            rageAudio.Play();
             fireball = GetComponentInChildren<Fireball>();
             rageEffect.Play();
             _rageBoost = 5;
             yield return new WaitForSeconds(10);
+            _israge = false;
+            rageAudio.Stop();
             rageEffect.Stop();
             _rageBoost = 0;
         }

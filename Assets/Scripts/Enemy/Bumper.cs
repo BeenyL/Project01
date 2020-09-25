@@ -5,9 +5,8 @@ using System;
 
 public class Bumper : Enemy
 {
-    [SerializeField] float PushForce = 100f;
+    [SerializeField] float PushForce = 5f;
     [SerializeField] Transform playerTransform;
-    // [SerializeField] Health health;
     //override PlayerImpact adding knockback on top of damaging player.
 
     protected override void PlayerImpact(PlayerMovement player)
@@ -16,7 +15,7 @@ public class Bumper : Enemy
         {
             PlayerProperty playerproperty = player.GetComponent<PlayerProperty>();
             PlayerMovement playermovement = player.GetComponent<PlayerMovement>();
-            playermovement.velocity = playermovement.transform.forward * -(5);
+            playermovement.velocity = playermovement.transform.forward * -(PushForce);
             playermovement.velocity.y = (2);
             playerproperty.isHurt = true;
             Debug.Log(playerproperty.isHurt);

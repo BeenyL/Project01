@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public class PlayerAbility : MonoBehaviour
 {
     [SerializeField] AbilityLoadout _abilityLoadout = null;
-    [SerializeField] Ability _startingAbility = null;
-    [SerializeField] Ability _newAbilityToTest = null;
+    [SerializeField] AbilityLoadout _abilityLoadoutSecondary = null;
+    [SerializeField] Ability _defaultAbility = null;
+    [SerializeField] Ability _ultimateAbility = null;
 
-    [SerializeField] Transform _testTarget = null;
     [SerializeField] PlayerMovement playermovement;
+    [SerializeField] PlayerProperty playerproperty;
 
     [SerializeField] Slider CooldownSlider;
     [SerializeField] Text CooldownText;
@@ -23,14 +24,17 @@ public class PlayerAbility : MonoBehaviour
 
     private void Awake()
     {
-        if(_startingAbility != null)
+        if(_defaultAbility != null)
         {
-            _abilityLoadout?.EquipAbility(_newAbilityToTest);
+            _abilityLoadout?.EquipDefaultAbility(_defaultAbility);
+        }
+        if (_ultimateAbility != null)
+        {
+            _abilityLoadoutSecondary?.EquipUltimateAbility(_ultimateAbility);
         }
     }
     private void Start()
     {
-        cooldownValue = 0;
         CooldownSlider.maxValue = cooldown;
         CooldownSlider.value = 0;
     }
@@ -38,13 +42,14 @@ public class PlayerAbility : MonoBehaviour
     private void Update()
     {
         //groundcheck to prevent player from using fireball while jumping or moving
-        if (Input.GetMouseButtonDown(0) && _isCasted == false && playermovement.Grounded == true && playermovement.Moving == false)
+        if (Input.GetMouseButtonDown(0) && _isCasted == false && playermovement.Grounded == true && playermovement.Moving == false && playerproperty.isDead == false)
         {
             cooldownValue = cooldown;
-            CooldownSlider.value = cooldown;
-            _abilityLoadout.UseEquippedAbility(CurrentTarget);
+            CooldownSlider.value = cooldownValue;
+            _abilityLoadout.UseDefaultAbility();
             StartCoroutine(AbilityCooldown());
         }
+
         if(cooldownValue >= 0.0001)
         {
             cooldownUI();
@@ -53,8 +58,20 @@ public class PlayerAbility : MonoBehaviour
     //Spell Cooldown
     IEnumerator AbilityCooldown()
     {
+        PlayerProperty playerproperty = GetComponentInChildren<PlayerProperty>();
+        if(playerproperty.isRage == true)
+        {
+            cooldownValue = cooldown / 2;
+            CooldownSlider.maxValue = cooldownValue;
+        }
+        else
+        {
+            cooldownValue = cooldown;
+            CooldownSlider.maxValue = cooldownValue;
+        }
+
         _isCasted = true;
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSecondsRealtime(cooldownValue);
         _isCasted = false;
 
     }
@@ -64,12 +81,5 @@ public class PlayerAbility : MonoBehaviour
             CooldownText.text = (cooldownValue -= Time.deltaTime).ToString("F1");
             CooldownSlider.value -= Time.deltaTime;
     }
-
-    //test target *ignore
-    public void SetTarget(Transform newTarget)
-    {
-        CurrentTarget = newTarget;
-    }
-
 
 }
