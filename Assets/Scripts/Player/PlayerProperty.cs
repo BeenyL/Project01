@@ -58,10 +58,6 @@ public class PlayerProperty : Health
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            _currentRage = 10;
-        }
         if(_currentRage != 0)
         {
          playerhud.updateRageSlider();

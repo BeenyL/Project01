@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     public event Action StartChannel = delegate { };
 
     [SerializeField] ParticleSystem walkParticles;
-    [SerializeField] ParticleSystem runParticles;
+    [SerializeField] ParticleSystem sprintParticles;
     [SerializeField] ParticleSystem jumpParticles;
     [SerializeField] ParticleSystem landParticles;
 
@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
                 if(isGrounded == true) { 
                 StartSprinting?.Invoke();
                 }
-                runParticles.Play();
+                sprintParticles.Play();
             }
             else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
@@ -113,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     StartRunning?.Invoke();
                 }
-                runParticles.Stop();
+                sprintParticles.Stop();
             }
             else
             {
@@ -187,7 +187,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    runParticles.Play();
+                    sprintParticles.Play();
                     StartSprinting?.Invoke();
                 }
             }
@@ -200,7 +200,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_isMoving == true && isGrounded == true)
         {
-            runParticles.Stop();
+            sprintParticles.Stop();
             walkParticles.Stop();
             Idle?.Invoke();
         }
@@ -236,6 +236,7 @@ public class PlayerMovement : MonoBehaviour
         if(_landed == false && playerproperty.isDead == false)
         {
             landParticles.Play();
+            sprintParticles.Stop();
             StartLanding?.Invoke();
         }
         _isFalling = false;
