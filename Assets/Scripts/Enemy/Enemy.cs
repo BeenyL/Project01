@@ -50,16 +50,15 @@ public class Enemy : Health
                 PlayerProperty playerproperty = FindObjectOfType<PlayerProperty>();
                 if (fireball != null)
                 {
-                int rageAmt = 1;
+                float rageAmt = 1f;
                     if(playerproperty.isRage == true)
                 {
-                    rageAmt = 0;
+                    rageAmt = 0f;
                 }
                 else
                 {
-                    rageAmt = 1;
-                }
-
+                    rageAmt = 1f;
+                }     
                     TakeDamage(fireball.Dmg + playerproperty.RageBoost);
                     playerproperty.increaseRage(rageAmt);
                     Soundfx.Play();

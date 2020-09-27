@@ -14,6 +14,11 @@ public class Health : MonoBehaviour
         Debug.Log(_currentHealth);
     }
 
+    public void Heal(int amount)
+    {
+        _currentHealth += amount;
+    }
+
     protected virtual void Die()
     {
 

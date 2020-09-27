@@ -13,6 +13,7 @@ public class Dummy : Enemy
     {
         IEnumerator KnockbackTimer()
         {
+            soundfx.volume = .85f;
             soundfx.PlayOneShot(bounced);
             PlayerProperty playerproperty = player.GetComponent<PlayerProperty>();
             PlayerMovement playermovement = player.GetComponent<PlayerMovement>();
@@ -27,7 +28,6 @@ public class Dummy : Enemy
             Debug.Log(playerproperty.isHurt);
         }
         StartCoroutine(KnockbackTimer());
-        Debug.Log("pushed");
     }
 
     protected override void Die()

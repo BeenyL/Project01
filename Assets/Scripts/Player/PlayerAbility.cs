@@ -49,8 +49,7 @@ public class PlayerAbility : MonoBehaviour
             _abilityLoadout.UseDefaultAbility();
             StartCoroutine(AbilityCooldown());
         }
-
-        if(cooldownValue >= 0.0001)
+        if (cooldownValue >= 0.0001)
         {
             cooldownUI();
         }
@@ -78,8 +77,8 @@ public class PlayerAbility : MonoBehaviour
 
     void cooldownUI()
     {
-            CooldownText.text = (cooldownValue -= Time.deltaTime).ToString("F1");
-            CooldownSlider.value -= Time.deltaTime;
+        CooldownSlider.value -= (1*Time.deltaTime);
+        CooldownText.text = (cooldownValue -= (1*Time.deltaTime)).ToString("F1");
     }
 
 }

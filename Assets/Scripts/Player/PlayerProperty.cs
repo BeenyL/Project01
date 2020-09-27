@@ -21,8 +21,8 @@ public class PlayerProperty : Health
     [SerializeField] ParticleSystem Dieparticle;
 
     [SerializeField] int Rage;
-    int _maxRage;
-    int _currentRage;
+    float _maxRage;
+    float _currentRage;
     int _maxHealth;
     int _rageBoost;
     int _healthcheck;
@@ -38,8 +38,8 @@ public class PlayerProperty : Health
     public bool isHurt { get => _ishurt; set => _ishurt = value; }
     public bool isRage { get => _israge; set => _israge = value; }
     public int RageBoost { get => _rageBoost; set => _rageBoost = value; }
-    public int CurrentRage{ get => _currentRage; set => _currentRage = value; }
-    public int MaxRage { get => _maxRage; set => _maxRage = value; }
+    public float CurrentRage{ get => _currentRage; set => _currentRage = value; }
+    public float MaxRage { get => _maxRage; set => _maxRage = value; }
     public int MaxHealth { get => _maxHealth; set => _maxHealth = value;}
     private void Awake()
     {
@@ -58,23 +58,33 @@ public class PlayerProperty : Health
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            _currentRage = 10;
+        }
         if(_currentRage != 0)
         {
-            playerhud.updateRageSlider();
+         playerhud.updateRageSlider();
         }
         rageTrigger();
-        Damaged();
+        RageCountdown(_israge);
+        CheckHealth();
         Die();
     }
 
-    //player damaged checker
-    public void Damaged()
+    //player damaged/healed checker
+    void CheckHealth()
     {
         if (_CurrentHealth < _healthcheck && _CurrentHealth != 0 && _isDead == false)
         {
+            audio.volume = .65f;
             audio.PlayOneShot(soundHit);
             Hitparticle.Play();
             StartHurt?.Invoke();
+            _healthcheck = _CurrentHealth;
+        }
+        if (_CurrentHealth > _healthcheck && _isDead == false)
+        {
             _healthcheck = _CurrentHealth;
         }
     }
@@ -91,6 +101,7 @@ public class PlayerProperty : Health
     }
     IEnumerator DieSequence()
     {
+        audio.volume = .65f;
         audio.PlayOneShot(soundDeath);
         _isDead = true;
         StartDeath?.Invoke();
@@ -99,7 +110,7 @@ public class PlayerProperty : Health
     }
 
     //Rage
-    public void increaseRage(int amount)
+    public void increaseRage(float amount)
     {
         _currentRage += amount;
     }
@@ -116,17 +127,16 @@ public class PlayerProperty : Health
         {
             StartCoroutine(RageTimer());
             abilityloadout.UseUltimateAbility();
-            _currentRage = 0;
-            playerhud.updateRageSlider();
             isFull = false;
             StartBuff?.Invoke();
         }
 
         IEnumerator RageTimer()
         {
+            fireball = GetComponentInChildren<Fireball>();
+            audio.volume = .65f;
             _israge = true;
             rageAudio.Play();
-            fireball = GetComponentInChildren<Fireball>();
             rageEffect.Play();
             _rageBoost = 5;
             yield return new WaitForSeconds(10);
@@ -134,6 +144,15 @@ public class PlayerProperty : Health
             rageAudio.Stop();
             rageEffect.Stop();
             _rageBoost = 0;
+        }
+    }
+    //when player in rage start decreasing rage
+    void RageCountdown(bool isEnraged)
+    {
+        if (isEnraged == true)
+        {
+                _currentRage -= (1*Time.deltaTime);
+                playerhud.updateRageSlider();
         }
     }
 }

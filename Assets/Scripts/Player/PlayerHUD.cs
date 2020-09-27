@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerHUD : MonoBehaviour
 {
-    [SerializeField] Health health;
+    [SerializeField] Health Playerhealth;
     [SerializeField] Slider healthBar;
     [SerializeField] Slider rageBar;
 
@@ -13,28 +13,49 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] Text ragePoint;
     [SerializeField] PlayerProperty player;
 
+    [SerializeField] Image healthBarImg;
+    [SerializeField] Image rageBarImg;
+
+    [SerializeField] Color defaultRageColor;
+    [SerializeField] Color defaultHealthColor;
+    Color MaxRageColor = Color.red;
+    Color LowHealth = Color.red;
+
     //update hud values
     public void updateHealthSlider()
     {
-        healthBar.value = health._CurrentHealth;
-        healthPoint.text = health._CurrentHealth.ToString() + " / " + player.MaxHealth.ToString();
+        healthBar.value = Playerhealth._CurrentHealth;
+        if (Playerhealth._CurrentHealth <= 10)
+        {
+            healthBarImg.color = LowHealth;
+        }
+        else
+        {
+            healthBarImg.color = defaultHealthColor;
+        }
+        healthPoint.text = Playerhealth._CurrentHealth.ToString() + " / " + player.MaxHealth.ToString();
     }
     public void updateRageSlider()
     {
         rageBar.value = player.CurrentRage;
-        ragePoint.text = player.CurrentRage.ToString() + " / " + player.MaxRage.ToString();
+        if(player.CurrentRage == 10)
+        {
+            rageBarImg.color = MaxRageColor;
+        }
+        else
+        {
+            rageBarImg.color = defaultRageColor;
+        }
+        ragePoint.text = player.CurrentRage.ToString("F0") + " / " + player.MaxRage.ToString("F0");
     }
     public void HealthBarAmt(int HealthAmt)
     {
         healthBar.maxValue = HealthAmt;
     }
 
-    public void RageBarAmt(int RageAmt)
+    public void RageBarAmt(float RageAmt)
     {
         rageBar.maxValue = RageAmt;
     }
-
-
-
 
 }

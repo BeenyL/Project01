@@ -59,6 +59,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
 
     public void OnStartRunning()
     {
+        audio.volume = .55f;
         audio.clip = clips[0];
         _animator.CrossFadeInFixedTime(RunState, .2f);
         StopAllCoroutines();
@@ -67,6 +68,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
 
     public void OnStartJumping()
     {
+        audio.volume = .55f;
         StopAllCoroutines();
         audio.PlayOneShot(clips[2]);
         _animator.CrossFadeInFixedTime(JumpState, .2f);
@@ -79,6 +81,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
 
     public void OnStartSprinting()
     {
+        audio.volume = 1;
         StopAllCoroutines();
         audio.clip = clips[1];
         _animator.CrossFadeInFixedTime(SprintState, .2f);
@@ -88,6 +91,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
 
     public void OnStartLanding()
     {
+        audio.volume = .55f;
         StopAllCoroutines();
         audio.PlayOneShot(clips[3]);
         _animator.CrossFadeInFixedTime(LandState, .2f);
