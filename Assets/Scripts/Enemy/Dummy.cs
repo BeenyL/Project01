@@ -20,12 +20,10 @@ public class Dummy : Enemy
             playermovement.velocity = playermovement.transform.forward * -(PushForce);
             playermovement.velocity.y = (2);
             playerproperty.isHurt = true;
-            Debug.Log(playerproperty.isHurt);
             yield return new WaitForSeconds(.5f);
             playermovement.velocity = Vector3.zero;
             playermovement.velocity.y = 0;
             playerproperty.isHurt = false;
-            Debug.Log(playerproperty.isHurt);
         }
         StartCoroutine(KnockbackTimer());
     }

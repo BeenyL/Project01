@@ -38,11 +38,11 @@ public class PlayerHUD : MonoBehaviour
     public void updateRageSlider()
     {
         rageBar.value = player.CurrentRage;
-        if(player.CurrentRage == 10)
+        if(player.CurrentRage >= 10)
         {
             rageBarImg.color = MaxRageColor;
         }
-        else
+        else if(player.CurrentRage < 10)
         {
             rageBarImg.color = defaultRageColor;
         }

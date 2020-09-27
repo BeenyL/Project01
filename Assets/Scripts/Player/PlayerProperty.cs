@@ -122,9 +122,9 @@ public class PlayerProperty : Health
         if (Input.GetKeyDown(KeyCode.R) && isFull == true && playermovement.Grounded == true && playermovement.Moving == false && _isDead == false)
         {
             StartCoroutine(RageTimer());
+            StartBuff?.Invoke();
             abilityloadout.UseUltimateAbility();
             isFull = false;
-            StartBuff?.Invoke();
         }
 
         IEnumerator RageTimer()
@@ -140,6 +140,7 @@ public class PlayerProperty : Health
             rageAudio.Stop();
             rageEffect.Stop();
             _rageBoost = 0;
+            _currentRage = 0;
         }
     }
     //when player in rage start decreasing rage
