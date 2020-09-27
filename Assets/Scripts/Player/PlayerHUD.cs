@@ -12,6 +12,8 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] Text healthPoint;
     [SerializeField] Text ragePoint;
     [SerializeField] PlayerProperty player;
+
+    //update hud values
     public void updateHealthSlider()
     {
         healthBar.value = health._CurrentHealth;
@@ -31,5 +33,8 @@ public class PlayerHUD : MonoBehaviour
     {
         rageBar.maxValue = RageAmt;
     }
+
+
+
 
 }

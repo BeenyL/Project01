@@ -7,6 +7,8 @@ public class Dummy : Enemy
     [SerializeField] float PushForce = 5f;
     [SerializeField] AudioSource soundfx;
     [SerializeField] AudioClip bounced;
+
+    //dummy modified playerimpact
     protected override void PlayerImpact(PlayerMovement player)
     {
         IEnumerator KnockbackTimer()
@@ -30,11 +32,7 @@ public class Dummy : Enemy
 
     protected override void Die()
     {
-        if(_CurrentHealth <= 0)
-        {
-            _CurrentHealth = 0;
-            Destroy(gameObject, .5f);
-        }
+        base.Die();
     }
 
 }

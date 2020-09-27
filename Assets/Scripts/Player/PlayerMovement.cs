@@ -49,11 +49,6 @@ public class PlayerMovement : MonoBehaviour
     bool _isSprinting = false;
     bool _isChannel = false;
 
-    private void Awake()
-    {
-
-    }
-
     private void Start()
     {
         Idle?.Invoke();
@@ -88,7 +83,6 @@ public class PlayerMovement : MonoBehaviour
         //idle rotation
         if (direction.magnitude == 0 && Input.GetMouseButton(1) && playerproperty.isDead == false)
         {
-
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
@@ -229,7 +223,7 @@ public class PlayerMovement : MonoBehaviour
     //check and play falling animation
   private void CheckIfStartedFall()
     {
-        if(_isFalling == false)
+        if(_isFalling == false && playerproperty.isDead == false)
         {
             StartFalling?.Invoke();
         }

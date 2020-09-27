@@ -7,6 +7,7 @@ using System;
 public class PlayerProperty : Health
 {
     [SerializeField] PlayerHUD playerhud;
+    [SerializeField] GameObject DeathScreen;
     [SerializeField] ParticleSystem rageEffect;
     [SerializeField] PlayerMovement playermovement;
     [SerializeField] AbilityLoadout abilityloadout;
@@ -57,14 +58,6 @@ public class PlayerProperty : Health
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            _currentRage = 0;
-            playerhud.updateRageSlider();
-            TakeDamage(10);
-            playerhud.updateHealthSlider();
-            Die();
-        }
         if(_currentRage != 0)
         {
             playerhud.updateRageSlider();
@@ -74,7 +67,7 @@ public class PlayerProperty : Health
         Die();
     }
 
-    //damaged
+    //player damaged checker
     public void Damaged()
     {
         if (_CurrentHealth < _healthcheck && _CurrentHealth != 0 && _isDead == false)
@@ -91,6 +84,7 @@ public class PlayerProperty : Health
     {
         if (_CurrentHealth <= 0 && _isDead == false)
         {
+            DeathScreen.SetActive(true);
             _CurrentHealth = 0;
             StartCoroutine(DieSequence());
         }

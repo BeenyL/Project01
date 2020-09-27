@@ -17,4 +17,16 @@ public class GameController : MonoBehaviour
             Application.Quit();
         }
     }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void EndGame()
+    {
+        Application.Quit();
+    }
+
+
 }

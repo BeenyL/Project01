@@ -6,6 +6,7 @@ public class AbilityLoadout : MonoBehaviour
 {
     public Ability EquippedAbility { get; private set; }
     public Ability UltimateAbility { get; private set; }
+
     public void EquipDefaultAbility(Ability ability)
     {
         RemoveCurrentAbilityObject();

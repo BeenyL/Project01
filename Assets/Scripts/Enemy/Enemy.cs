@@ -12,7 +12,8 @@ public class Enemy : Health
     [SerializeField] ParticleSystem HitParticle;
     [SerializeField] AudioSource Soundfx;
     [SerializeField] AudioClip[] clips;
-
+    [SerializeField] Transform target;
+    
     int healthCheck;
 
     bool isTriggered;
@@ -25,6 +26,12 @@ public class Enemy : Health
         enemyhealthSlider.value = _CurrentHealth;
     }
 
+    private void Update()
+    {
+        enemyhealthSlider.transform.LookAt(target);
+    }
+
+    //hit detections
     private void OnTriggerEnter(Collider other)
     {
         PlayerMovement player = other.gameObject.GetComponent<PlayerMovement>();
@@ -63,6 +70,7 @@ public class Enemy : Health
             }
     }
 
+    //player ultimate hit detection
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Aoe")
@@ -87,6 +95,7 @@ public class Enemy : Health
         }
     }
 
+    //update enemy healthbar
     void checkhealth()
     {
         if(_CurrentHealth < healthCheck)
@@ -103,7 +112,11 @@ public class Enemy : Health
 
     protected override void Die()
     {
-
+        if (_CurrentHealth <= 0)
+        {
+            _CurrentHealth = 0;
+            Destroy(gameObject, .5f);
+        }
     }
 
 }

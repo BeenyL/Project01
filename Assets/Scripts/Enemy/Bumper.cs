@@ -7,8 +7,8 @@ public class Bumper : Enemy
 {
     [SerializeField] float PushForce = 5f;
     [SerializeField] Transform playerTransform;
-    //override PlayerImpact adding knockback on top of damaging player.
 
+    //override PlayerImpact adding knockback on top of damaging player.
     protected override void PlayerImpact(PlayerMovement player)
     {
         IEnumerator KnockbackTimer()
@@ -26,7 +26,11 @@ public class Bumper : Enemy
             Debug.Log(playerproperty.isHurt);
         }
         StartCoroutine(KnockbackTimer());
-        Debug.Log("pushed");
+    }
+
+    protected override void Die()
+    {
+        base.Die();
     }
 
 }
