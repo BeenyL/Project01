@@ -42,7 +42,7 @@ public class Enemy : Health
             playerhud.updateHealthSlider();
         }
 
-            if (other.gameObject.tag == "Projectile")
+            if (other.gameObject.tag == "Projectile" && gameObject.tag == "Enemy")
             {
             Soundfx.clip = clips[0];
 

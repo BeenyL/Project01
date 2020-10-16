@@ -7,6 +7,7 @@ TagManager:
   - Projectile
   - Enemy
   - Aoe
+  - Range
   layers:
   - Default
   - TransparentFX

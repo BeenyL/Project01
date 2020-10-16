@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4680757731156830890}
   - component: {fileID: 4680757731157960810}
   - component: {fileID: 7495719641570791432}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rock_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,6 +66,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

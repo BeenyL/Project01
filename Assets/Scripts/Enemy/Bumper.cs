@@ -7,6 +7,7 @@ public class Bumper : Enemy
 {
     [SerializeField] float PushForce = 5f;
     [SerializeField] Transform playerTransform;
+    [SerializeField] GameObject Main;
 
     //override PlayerImpact adding knockback on top of damaging player.
     protected override void PlayerImpact(PlayerMovement player)
@@ -28,7 +29,11 @@ public class Bumper : Enemy
 
     protected override void Die()
     {
-        base.Die();
+        if (_CurrentHealth <= 0)
+        {
+            _CurrentHealth = 0;
+            Destroy(Main, .5f);
+        }
     }
 
 }

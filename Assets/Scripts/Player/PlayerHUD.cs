@@ -11,6 +11,7 @@ public class PlayerHUD : MonoBehaviour
 
     [SerializeField] Text healthPoint;
     [SerializeField] Text ragePoint;
+    [SerializeField] Text gemPoint;
     [SerializeField] PlayerProperty player;
 
     [SerializeField] Image healthBarImg;
@@ -48,6 +49,12 @@ public class PlayerHUD : MonoBehaviour
         }
         ragePoint.text = player.CurrentRage.ToString("F0") + " / " + player.MaxRage.ToString("F0");
     }
+
+    public void updatePoint()
+    {
+        gemPoint.text = "Points: " + player.CurrentPoint.ToString() + " / " + player.MaxPoint.ToString();
+    }
+
     public void HealthBarAmt(int HealthAmt)
     {
         healthBar.maxValue = HealthAmt;

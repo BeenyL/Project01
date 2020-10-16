@@ -7,6 +7,7 @@ public class Dummy : Enemy
     [SerializeField] float PushForce = 5f;
     [SerializeField] AudioSource soundfx;
     [SerializeField] AudioClip bounced;
+    [SerializeField] GameObject Main;
 
     //dummy modified playerimpact
     protected override void PlayerImpact(PlayerMovement player)
@@ -30,7 +31,11 @@ public class Dummy : Enemy
 
     protected override void Die()
     {
-        base.Die();
+        if (_CurrentHealth <= 0)
+        {
+            _CurrentHealth = 0;
+            Destroy(Main, .5f);
+        }
     }
 
 }

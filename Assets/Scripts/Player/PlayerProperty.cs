@@ -26,6 +26,8 @@ public class PlayerProperty : Health
     int _maxHealth;
     int _rageBoost;
     int _healthcheck;
+    int _currentPoint;
+    public int _maxPoint;
 
     bool _isDead = false;
     bool _ishurt = false;
@@ -41,8 +43,11 @@ public class PlayerProperty : Health
     public float CurrentRage{ get => _currentRage; set => _currentRage = value; }
     public float MaxRage { get => _maxRage; set => _maxRage = value; }
     public int MaxHealth { get => _maxHealth; set => _maxHealth = value;}
+    public int CurrentPoint { get => _currentPoint; set => _currentPoint = value;}
+    public int MaxPoint { get => _maxPoint; set => _maxPoint = value;}
     private void Awake()
     {
+
         _healthcheck = _CurrentHealth;
         _maxRage = Rage;
         _currentRage = 0;
@@ -54,6 +59,7 @@ public class PlayerProperty : Health
     {
         playerhud.updateHealthSlider();
         playerhud.updateRageSlider();
+        playerhud.updatePoint();
     }
 
     private void Update()
@@ -66,6 +72,13 @@ public class PlayerProperty : Health
         RageCountdown(_israge);
         CheckHealth();
         Die();
+    }
+
+    //point system
+
+    public void addPoint(int value)
+    {
+        _currentPoint += value;
     }
 
     //player damaged/healed checker
