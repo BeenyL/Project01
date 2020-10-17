@@ -11,8 +11,13 @@ public class FlameBurst : Ability
     public override void Use(Transform orgin)
     {
         Soundfx.Play();
-        GameObject Spawn_object = Instantiate(Spawnedobject, SpawnPosition.position, SpawnPosition.rotation);
-        Destroy(Spawn_object, 5f);
+        StartCoroutine(StartWave());
 
+    }
+    IEnumerator StartWave()
+    {
+        Spawnedobject.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        Spawnedobject.SetActive(false);
     }
 }

@@ -143,7 +143,7 @@ public class PlayerProperty : Health
         IEnumerator RageTimer()
         {
             fireball = GetComponentInChildren<Fireball>();
-            audio.volume = .65f;
+            audio.volume = .45f;
             _israge = true;
             rageAudio.Play();
             rageEffect.Play();

@@ -234,8 +234,8 @@ MonoBehaviour:
   HitParticle: {fileID: 2338816272202058802}
   Soundfx: {fileID: 6908519288649914435}
   clips:
-  - {fileID: 8300000, guid: 85ca2b4b83202624fbac2781daadc5e5, type: 3}
-  - {fileID: 8300000, guid: 37ce9c00a4d678c49856e025a837ee5a, type: 3}
+  - {fileID: 8300000, guid: 0a17a65bcd80f054da2a0088123e46e2, type: 3}
+  - {fileID: 8300000, guid: 0a17a65bcd80f054da2a0088123e46e2, type: 3}
   target: {fileID: 0}
   PushForce: 5
   soundfx: {fileID: 6035263330219028560}
