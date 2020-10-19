@@ -30,6 +30,11 @@ public class EnemyTerritory : MonoBehaviour
         {
             basicenemy.Rest();
         }
+
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        basicenemy.enabled = true;    
     }
 
     void OnTriggerStay(Collider other)

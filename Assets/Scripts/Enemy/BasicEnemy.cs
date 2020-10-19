@@ -7,22 +7,20 @@ public class BasicEnemy : MonoBehaviour
     public Transform target;
     public Transform BackPoint;
     [SerializeField] Rigidbody rb;
+    [SerializeField] Enemy enemy;
     public float speed = 3f;
     public float attack1Range = 1f;
-    public int attack1Damage = 1;
-    public float timeBetweenAttacks;
-
-
+    PlayerProperty playerproperty;
     // Use this for initialization
     void Start()
     {
         rb.GetComponent<Rigidbody>();
+      playerproperty = FindObjectOfType<PlayerProperty>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
     }
 
     public void MoveToPlayer()
@@ -33,17 +31,19 @@ public class BasicEnemy : MonoBehaviour
         transform.Rotate(new Vector3(0, -180, 0), Space.Self);
 
         //move towards player
-        if (Vector3.Distance(transform.position, target.position) > attack1Range)
+        if (Vector3.Distance(transform.position, target.position) > attack1Range && playerproperty.isDead == false)
         {
-            rb.MovePosition((Vector3)transform.position + (direction * speed * Time.deltaTime));
+            if (enemy.IAttacked == false)
+            {
+                rb.MovePosition((Vector3)transform.position + (direction * speed * Time.deltaTime));
+            }
         }
     }
 
     public void Rest()
     {
         Vector3 direction = BackPoint.position - transform.position;
-
-        if (Vector3.Distance(transform.position, BackPoint.position) > 1)
+        if (Vector3.Distance(transform.position, BackPoint.position) > 3)
         {
             transform.LookAt(BackPoint.position);
             transform.Rotate(new Vector3(0, -180, 0), Space.Self);
@@ -51,7 +51,8 @@ public class BasicEnemy : MonoBehaviour
         }
         else
         {
-            transform.rotation = Quaternion.identity;
+            transform.rotation = BackPoint.rotation;
+            //transform.rotation = Quaternion.identity;
         }
     }
 }

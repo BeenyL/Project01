@@ -7,6 +7,10 @@ public class HealthCube : MonoBehaviour
     [SerializeField] PlayerProperty playerproperty;
     [SerializeField] PlayerHUD playerhud;
     [SerializeField] AudioSource audio;
+    [SerializeField] MeshRenderer meshrender;
+    [SerializeField] BoxCollider meshcollider;
+    [SerializeField] ParticleSystem particle;
+    [SerializeField] Light light;
 
     private void OnTriggerStay(Collider other)
     {
@@ -18,6 +22,10 @@ public class HealthCube : MonoBehaviour
                 audio.Play();
                 playerproperty.Heal(5);
                 playerhud.updateHealthSlider();
+                meshrender.enabled = false;
+                meshcollider.enabled = false;
+                particle.Stop();
+                light.enabled = false;
                 Debug.Log(playerproperty._CurrentHealth);
             }
             else

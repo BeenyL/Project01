@@ -7,8 +7,10 @@ public class GemCube : MonoBehaviour
     [SerializeField] PlayerProperty playerproperty;
     [SerializeField] PlayerHUD playerhud;
     [SerializeField] AudioSource audio;
+    [SerializeField] MeshRenderer meshrender;
+    [SerializeField] MeshCollider meshcollider;
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
@@ -18,7 +20,8 @@ public class GemCube : MonoBehaviour
                 audio.Play();
                 playerproperty.addPoint(1);
                 playerhud.updatePoint();
-                Destroy(gameObject);
+                meshrender.enabled = false;
+                meshcollider.enabled = false;
             }
             else
             {

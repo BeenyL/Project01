@@ -8,13 +8,12 @@ public class Dummy : Enemy
     [SerializeField] AudioSource soundfx;
     [SerializeField] AudioClip bounced;
     [SerializeField] GameObject Main;
-
     //dummy modified playerimpact
     protected override void PlayerImpact(PlayerMovement player)
     {
         IEnumerator KnockbackTimer()
         {
-            soundfx.volume = .85f;
+            soundfx.volume = .35f;
             soundfx.PlayOneShot(bounced);
             PlayerProperty playerproperty = player.GetComponent<PlayerProperty>();
             PlayerMovement playermovement = player.GetComponent<PlayerMovement>();
@@ -24,9 +23,18 @@ public class Dummy : Enemy
             yield return new WaitForSeconds(.5f);
             playermovement.velocity = Vector3.zero;
             playermovement.velocity.y = 0;
+            playermovement.velocity.x = 0;
+            playermovement.velocity.z = 0;
             playerproperty.isHurt = false;
         }
+        IEnumerator Attackdown()
+        {
+            IAttacked = true;
+            yield return new WaitForSeconds(1.5f);
+            IAttacked = false;
+        }
         StartCoroutine(KnockbackTimer());
+        StartCoroutine(Attackdown());
     }
 
     protected override void Die()

@@ -10,6 +10,7 @@ public class FlameBurst : Ability
     [SerializeField] AudioSource Soundfx;
     public override void Use(Transform orgin)
     {
+        Soundfx.volume = .15f;
         Soundfx.Play();
         StartCoroutine(StartWave());
 

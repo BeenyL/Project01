@@ -13,10 +13,13 @@ public class PlayerAbility : MonoBehaviour
     [SerializeField] PlayerMovement playermovement;
     [SerializeField] PlayerProperty playerproperty;
 
-    [SerializeField] Slider CooldownSlider;
     [SerializeField] Text CooldownText;
 
-    float cooldown = 2;
+    [SerializeField] Image AttackImg;
+    [SerializeField] Color defaultColor;
+    Color CooldownColor;
+
+    float cooldown = 1;
     float cooldownValue;
     bool _isCasted = false;
     public bool Casted { get => _isCasted; set => _isCasted = value; }
@@ -35,8 +38,6 @@ public class PlayerAbility : MonoBehaviour
     }
     private void Start()
     {
-        CooldownSlider.maxValue = cooldown;
-        CooldownSlider.value = 0;
     }
 
     private void Update()
@@ -45,7 +46,6 @@ public class PlayerAbility : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && _isCasted == false && playermovement.Grounded == true && playermovement.Moving == false && playerproperty.isDead == false)
         {
             cooldownValue = cooldown;
-            CooldownSlider.value = cooldownValue;
             _abilityLoadout.UseDefaultAbility();
             StartCoroutine(AbilityCooldown());
         }
@@ -58,26 +58,27 @@ public class PlayerAbility : MonoBehaviour
     IEnumerator AbilityCooldown()
     {
         PlayerProperty playerproperty = GetComponentInChildren<PlayerProperty>();
+        AttackImg.GetComponent<Image>();
         if(playerproperty.isRage == true)
         {
             cooldownValue = cooldown / 2;
-            CooldownSlider.maxValue = cooldownValue;
         }
         else
         {
             cooldownValue = cooldown;
-            CooldownSlider.maxValue = cooldownValue;
         }
-
+        defaultColor.a = .5f;
         _isCasted = true;
+        AttackImg.color = defaultColor;
         yield return new WaitForSecondsRealtime(cooldownValue);
+        defaultColor.a = 1f;
+        AttackImg.color = defaultColor;
         _isCasted = false;
 
     }
 
     void cooldownUI()
     {
-        CooldownSlider.value -= (1*Time.deltaTime);
         CooldownText.text = (cooldownValue -= (1*Time.deltaTime)).ToString("F1");
     }
 

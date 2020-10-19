@@ -13,10 +13,15 @@ public class Enemy : Health
     [SerializeField] AudioSource Soundfx;
     [SerializeField] AudioClip[] clips;
     [SerializeField] Transform target;
-    
+    [SerializeField] Rigidbody rb;
     int healthCheck;
 
     bool isTriggered;
+
+
+    bool Attacked = false;
+    public bool IAttacked { get => Attacked; set => Attacked = value; }
+
     public int _Dmg { get => _dmg; set => _dmg = value; }
 
     private void Awake()
@@ -35,6 +40,7 @@ public class Enemy : Health
     private void OnTriggerEnter(Collider other)
     {
         PlayerMovement player = other.gameObject.GetComponent<PlayerMovement>();
+        rb.GetComponent<Rigidbody>();
         if (player != null)
         {
             PlayerImpact(player);
@@ -58,7 +64,8 @@ public class Enemy : Health
                 else
                 {
                     rageAmt = 1f;
-                }     
+                }
+                    rb.AddForce(transform.forward * 150f);
                     TakeDamage(fireball.Dmg + playerproperty.RageBoost);
                     playerproperty.increaseRage(rageAmt);
                     Soundfx.Play();
@@ -83,7 +90,8 @@ public class Enemy : Health
             }
             IEnumerator damageOverTime()
             {
-                TakeDamage(1);
+                rb.AddForce(transform.forward * 100f);
+                TakeDamage(4);
                 Soundfx.Play();
                 HitParticle.Play();
                 yield return new WaitForSeconds(.25f);

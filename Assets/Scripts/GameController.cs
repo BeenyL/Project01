@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] Text MenuText;
+    [SerializeField] GameObject Menu;
+    bool esc;
     //restart / quit
     void Update()
     {
@@ -12,9 +16,18 @@ public class GameController : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
-        else if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            esc = !esc;
+            if(esc == true)
+            {
+                MenuText.text = "Menu";
+                Menu.SetActive(true);
+            }
+            else
+            {
+                Menu.SetActive(false);
+            }
         }
     }
 

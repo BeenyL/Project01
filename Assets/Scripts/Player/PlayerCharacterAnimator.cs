@@ -81,7 +81,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
 
     public void OnStartSprinting()
     {
-        audio.volume = 1;
+        audio.volume = .55f;
         StopAllCoroutines();
         audio.clip = clips[1];
         _animator.CrossFadeInFixedTime(SprintState, .2f);

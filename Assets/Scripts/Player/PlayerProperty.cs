@@ -8,6 +8,7 @@ public class PlayerProperty : Health
 {
     [SerializeField] PlayerHUD playerhud;
     [SerializeField] GameObject DeathScreen;
+    [SerializeField] Text DeathText;
     [SerializeField] ParticleSystem rageEffect;
     [SerializeField] PlayerMovement playermovement;
     [SerializeField] AbilityLoadout abilityloadout;
@@ -16,6 +17,9 @@ public class PlayerProperty : Health
     [SerializeField] AudioClip soundHit;
     [SerializeField] AudioClip soundDeath;
     Fireball fireball;
+
+    [SerializeField] Image WaveImg;
+    [SerializeField] Color DefaultColor;
 
     [SerializeField] ParticleSystem Hitparticle;
     [SerializeField] ParticleSystem Dieparticle;
@@ -47,7 +51,8 @@ public class PlayerProperty : Health
     public int MaxPoint { get => _maxPoint; set => _maxPoint = value;}
     private void Awake()
     {
-
+        DefaultColor.a = .5f;
+        WaveImg.color = DefaultColor;
         _healthcheck = _CurrentHealth;
         _maxRage = Rage;
         _currentRage = 0;
@@ -72,6 +77,7 @@ public class PlayerProperty : Health
         RageCountdown(_israge);
         CheckHealth();
         Die();
+        CheckPoint();
     }
 
     //point system
@@ -79,6 +85,16 @@ public class PlayerProperty : Health
     public void addPoint(int value)
     {
         _currentPoint += value;
+        Debug.Log(_currentPoint);
+    }
+
+    void CheckPoint()
+    {
+        if (_currentPoint == 15)
+        {
+            DeathText.text = "Level Complete!";
+            DeathScreen.SetActive(true);
+        }
     }
 
     //player damaged/healed checker
@@ -86,7 +102,7 @@ public class PlayerProperty : Health
     {
         if (_CurrentHealth < _healthcheck && _CurrentHealth != 0 && _isDead == false)
         {
-            audio.volume = .65f;
+            audio.volume = .3f;
             audio.PlayOneShot(soundHit);
             Hitparticle.Play();
             StartHurt?.Invoke();
@@ -103,6 +119,7 @@ public class PlayerProperty : Health
     {
         if (_CurrentHealth <= 0 && _isDead == false)
         {
+            DeathText.text = "You Died!";
             DeathScreen.SetActive(true);
             _CurrentHealth = 0;
             StartCoroutine(DieSequence());
@@ -110,7 +127,7 @@ public class PlayerProperty : Health
     }
     IEnumerator DieSequence()
     {
-        audio.volume = .65f;
+        audio.volume = .4f;
         audio.PlayOneShot(soundDeath);
         _isDead = true;
         StartDeath?.Invoke();
@@ -128,12 +145,16 @@ public class PlayerProperty : Health
         bool isFull = false;
         if (_currentRage >= _maxRage)
         {
+            DefaultColor.a = 1f;
+            WaveImg.color = DefaultColor;
             _currentRage = _maxRage;
             isFull = true;
         }
 
         if (Input.GetKeyDown(KeyCode.R) && isFull == true && playermovement.Grounded == true && playermovement.Moving == false && _isDead == false)
         {
+            DefaultColor.a = .5f;
+            WaveImg.color = DefaultColor;
             StartCoroutine(RageTimer());
             StartBuff?.Invoke();
             abilityloadout.UseUltimateAbility();
@@ -143,7 +164,7 @@ public class PlayerProperty : Health
         IEnumerator RageTimer()
         {
             fireball = GetComponentInChildren<Fireball>();
-            audio.volume = .45f;
+            audio.volume = .2f;
             _israge = true;
             rageAudio.Play();
             rageEffect.Play();

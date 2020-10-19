@@ -25,6 +25,7 @@ public class Fireball : Ability
     {
         for (int i = 0; i < _amt; i++)
         {
+            Soundfx.volume = .3f;
             Soundfx.Play();
             GameObject projectile = Instantiate(_projectileSpawned, SpawnPosition[i].position, SpawnPosition[i].rotation );
             Destroy(projectile, 1f);
